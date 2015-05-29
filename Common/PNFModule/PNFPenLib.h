@@ -27,9 +27,6 @@
 @property(readonly) int         Temperature;
 @property(readonly) BOOL		bConnected;
 #if TARGET_OS_IPHONE
-@property(readonly) int         ProjectiveLevel;
-@property(readonly) BOOL        bFixStation;
-@property(readonly) BOOL		bCalibrated;
 #else
 @property(readonly) BOOL		bConnectedHID;
 #endif
@@ -61,7 +58,8 @@
 
 -(void) setCalibrationData:(CGRect) rtDraw GuideMargin:(float) margin CalibPoint:(CGPoint[]) ptCal;
 
--(void) addAffineTransform:(CGAffineTransform) trans;   //additional transform
+-(void) setProjectiveLevel:(int) nProjectiveLevel;
+-(int)  getProjectiveLevel;
 
 -(void) changeAudioMode:(BOOL)audio;
 -(void) changeVolume:(int)vol;
@@ -75,18 +73,6 @@
 -(void) initPenUp;
 
 #if TARGET_OS_IPHONE
--(void) changePosition;
--(BOOL) CheckValidCalibValue:(int) calNo GuideMargin:(int) nMargin CalPoint:(CGPoint) ptCal;
-
--(void) setProjectiveLevel:(int) nProjectiveLevel;
--(int)  getProjectiveLevel;
-
--(void) fixStationPosition:(enum DEVICE_DIRECTION) nStationPosition;
--(void) freeStationPosition;
-
--(void) setDefaultModelCode:(enum ModelCode)_modelCode;
-
--(void) setConnectDelay:(BOOL)delayFlag;
 #else
 -(void) changeScreenSize:(CGRect)rtDraw;
 -(void) InitBTConnection:(int)mCode;

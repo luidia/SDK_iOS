@@ -72,6 +72,7 @@
 -(void) EndReadQ;
 
 -(void) initPenUp;
+-(float) calcSmartMarkerEraseThick:(BOOL)isBig;
 
 #if TARGET_OS_IPHONE
 #else

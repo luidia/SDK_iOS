@@ -474,7 +474,7 @@ enum CaliType {
 -(BOOL) shouldAutoRotate {
     return YES;
 }
--(NSUInteger)supportedInterfaceOrientations {
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait|UIInterfaceOrientationMaskPortraitUpsideDown;
 }
 //EquilOrientationRegisterPortrait()

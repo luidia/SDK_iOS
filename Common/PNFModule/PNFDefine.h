@@ -95,5 +95,6 @@ enum DataImportCommand {
     DI_PacketSize108,
     DI_PacketSize126,   // 25
     DI_PacketSize144,
+    DI_SetLabel
 };
 #endif

@@ -29,6 +29,7 @@
 #if TARGET_OS_IPHONE
 #else
 @property(readonly) BOOL		bConnectedHID;
+@property(readonly) BOOL		bConnectedHIDDongle;
 @property(readonly) NSString*	macAddress;
 #endif
 @property(readonly) BOOL        bStopped;

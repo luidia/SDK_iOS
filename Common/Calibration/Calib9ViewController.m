@@ -78,7 +78,7 @@
         return;
     }
     else if ([szS isEqualToString:@"SESSION_CLOSED"]) {
-        [self dismissModalViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:YES completion:^{}];
     }
     else if ([szS isEqualToString:@"PEN_RMD_ERROR"]) {
         if (m_PenController && (m_PenController.PenStatus == PEN_DOWN || m_PenController.PenStatus == PEN_MOVE)) {
@@ -127,7 +127,7 @@
 }
 
 -(void) closeSelf {
-    [self dismissModalViewControllerAnimated:NO];
+    [self dismissViewControllerAnimated:NO completion:^{}];
 }
 
 -(void) InitData
@@ -145,7 +145,7 @@
         if ([self.delegate respondsToSelector:@selector(closeCalib9ViewController)])
             [delegate closeCalib9ViewController];
     }
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (IBAction)retryClicked:(id)sender {
@@ -272,7 +272,7 @@
                 if ([self.delegate respondsToSelector:@selector(closeCalib9ViewController)])
                     [delegate closeCalib9ViewController];
             }
-            [self dismissModalViewControllerAnimated:YES];
+            [self dismissViewControllerAnimated:YES completion:^{}];
         }
         else if (buttonIndex == 1) { // 적용
             m_CalResultPoint[0].x = (m_CalResultPointTemp[0].x+m_CalResultPointTemp[1].x+m_CalResultPointTemp[2].x)/3;
@@ -320,7 +320,7 @@
                 if ([self.delegate respondsToSelector:@selector(closeCalib9ViewController)])
                     [delegate closeCalib9ViewController];
             }
-            [self dismissModalViewControllerAnimated:YES];
+            [self dismissViewControllerAnimated:YES completion:^{}];
         }
         else if (buttonIndex == 2) { // 다시
             [self retryClicked:nil];

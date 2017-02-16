@@ -110,6 +110,6 @@
     [startTimeField setText:[startTime stringFromDate:[NSDate date]]];
 }
 - (IBAction)closeClicked:(id)sender {
-    [self dismissModalViewControllerAnimated:NO];
+    [self dismissViewControllerAnimated:NO completion:^{}];
 }
 @end

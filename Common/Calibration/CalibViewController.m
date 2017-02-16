@@ -201,7 +201,7 @@
 }
 
 -(void) closeSelf {
-    [self dismissModalViewControllerAnimated:NO];
+    [self dismissViewControllerAnimated:NO completion:^{}];
 }
 
 -(void) InitData
@@ -256,7 +256,7 @@
         if ([self.delegate respondsToSelector:@selector(closeCalibViewController:btPosition:)])
             [delegate closeCalibViewController:leftOrg btPosition:btPositionOrg];
     }
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (IBAction)retryClicked:(id)sender {
@@ -497,7 +497,7 @@
                 if ([self.delegate respondsToSelector:@selector(closeCalibViewController:btPosition:)])
                     [delegate closeCalibViewController:leftOrg btPosition:btPositionOrg];
             }
-            [self dismissModalViewControllerAnimated:YES];
+            [self dismissViewControllerAnimated:YES completion:^{}];
         }
         else if (buttonIndex == 1) { // 적용
             if (m_PenController.modelCode <= 1) {
@@ -579,7 +579,7 @@
                     [delegate closeCalibViewController:left btPosition:btPositionOrg];
                 
             }
-            [self dismissModalViewControllerAnimated:YES];
+            [self dismissViewControllerAnimated:YES completion:^{}];
         }
         else if (buttonIndex == 2) { // 다시
             [self retryClicked:nil];

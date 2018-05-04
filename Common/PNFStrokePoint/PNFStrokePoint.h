@@ -2,16 +2,16 @@
 //  PNFStrokePoint.h
 //  MINTInteractive
 //
-//  Created by Jootae Kim on 10. 11. 30..
-//  Copyright 2010 PNF/RnD Ceneter. All rights reserved.
+//  Created by Luidia on 2018. 05. 04..
+//  Copyright © 2018년 choi. All rights reserved.
 //
 
 
 
 @interface PNFStrokePoint:NSObject<NSCoding, NSCopying, NSMutableCopying> {
-
-	CGPoint		pt;
-	float		press;
+    
+    CGPoint        pt;
+    float        press;
 }
 
 @property(readwrite) CGPoint pt;

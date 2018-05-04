@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #else
@@ -26,10 +27,12 @@
 @property(readonly) int         StationPosition;
 @property(readonly) int         Temperature;
 @property(readonly) BOOL		bConnected;
+@property(readonly) BOOL        isBLEConnect;
 #if TARGET_OS_IPHONE
 #else
 @property(readonly) BOOL		bConnectedHID;
 @property(readonly) BOOL		bConnectedHIDDongle;
+@property(readonly) BOOL		bConnectedHIDDonglePaired;
 @property(readonly) NSString*	macAddress;
 #endif
 @property(readonly) BOOL        bStopped;
@@ -39,17 +42,41 @@
 @property(readonly) int         MCU1Version;
 @property(readonly) int         MCU2Version;
 @property(readonly) int         HWVersion;
+@property(readonly) int         BTVersion;
 @property(readonly) int         penAliveSec;
 @property(readonly) BOOL        AudioMode;
 @property(readonly) int         Volume;
 @property(readonly) int         battery_station;
 @property(readonly) int         battery_pen;
+@property(readonly) int         RSSI;
+@property(readonly) CGPoint     deviceCalibrationData_0;
+@property(readonly) CGPoint     deviceCalibrationData_1;
+@property(readonly) CGPoint     deviceCalibrationData_2;
+@property(readonly) CGPoint     deviceCalibrationData_3;
+@property(readonly) enum DEVICE_DIRECTION devicePosition;
+@property(readonly) enum DEVICE_LANGUAGE_CODE deviceLanguage;
 
-#if TARGET_OS_IPHONE
--(int) startPen;
-#else
--(int) startPen:(int)mCode;
-#endif
+// For BLE Start
+-(void) BLEInit;
+-(void) BLEScan;
+-(void) BLEScanStop;
+-(CBPeripheral*) getBLEPeripheral:(NSUUID*)nsUUID deviceName:(NSString*)name;
+-(void) BLEConnect:(CBPeripheral *)peripheral;
+-(void) BLEDisconnect;
+-(void) BLEConnectForce:(CBPeripheral *)peripheral;
+-(void) BLEDisconnectForce;
+-(NSString*) BLECurrentName;
+
+-(void) startCalibrationMode;
+-(void) endCalibrationMode;
+-(void) setStationPositionForCalibration:(enum DEVICE_DIRECTION)dir;
+-(void) changeDeviceName:(NSString*)name;
+-(void) getCalibrationInfo;
+-(void) setCalibrationDataToDevice:(enum DEVICE_DIRECTION)position CalibPoint:(CGPoint[]) ptCal;
+-(void) resetCalibrationToDevice;
+-(void) setDeviceLanguage:(enum DEVICE_LANGUAGE_CODE)lang;
+// For BLE End
+
 -(void) stopPen;
 -(void) restartPen;
 -(void) disConnectPen;
@@ -75,76 +102,13 @@
 -(void) initPenUp;
 -(float) calcSmartMarkerEraseThick:(BOOL)isBig;
 
+-(void) GetTransData:(CGFloat) xxx RawY:(CGFloat) yyy TransX:(CGFloat *) xx TransY:(CGFloat *)yy flag:(int)flag;
+
 #if TARGET_OS_IPHONE
 #else
 -(void) changeScreenSize:(CGRect)rtDraw;
 -(void) InitBTConnection:(int)mCode;
 -(NSArray*) savePenInfoCount;
+-(void) PlayHIDSound:(BOOL)connect;
 #endif
-
-// Data Import Start =============================//
-@property(readonly) int         SMPenState;
-@property(readonly) int         SMPenFlag;
-@property(readonly) int di_paper_size;
-@property(readonly) int di_figure_count;
-@property(readonly) NSMutableArray* di_debug_str;
-@property(readonly) int di_freespace;
-@property(readonly) BOOL di_bRun;
-@property(readonly) BOOL di_bTemporary_file;
-@property(readonly) NSData *di_file_data;
-@property(readonly) NSMutableArray *di_file_data_temp;
-@property(readonly) NSMutableArray *di_file_data_mg;
-@property(readonly) NSMutableArray *di_file_data_mg_paper;
-@property(readonly) NSMutableArray *di_savefilename;
-@property(readonly) int di_tempfile_size;
-#if TARGET_OS_IPHONE
-@property(readonly) int di_disk_state;
-#else
-#endif
-
-#if TARGET_OS_IPHONE
-#else
--(void) checkDICalFromUSB:(NSMutableData*)data;
-// for USB Import
--(NSMutableDictionary*) USBManager_Dic;
--(NSMutableArray*) USBManager_FolderList;
--(NSMutableArray*) USBManager_FileList;
--(NSString*) USBManager_RootPath;
--(void) USBManager_setBookmarkData:(NSData*)bookmarkData;
--(NSString*) USBManager_BookmarkPath;
--(void) checkDiData;
--(BOOL) isCheckDiData;
-#endif
--(int) getFolderCount;
--(int) getDIAllFileCount;
--(int) getFileCount:(int)index;
--(void) setFolderIndex:(int) index;
--(void) setFileIndex:(int) index;
--(NSMutableArray*) getDIFolderName;
--(NSMutableArray*) getDIFileName:(int)folder;
--(NSMutableArray*) getDISavefileName;
--(NSMutableArray*) getDISaveAllfileName;
--(void) setChoiceFolder:(int)index setState:(int)state;
--(void) setChoiceFile:(int)index fileDel:(BOOL)bkey;
--(int) getDIState;
--(int) getDIDownFileSize;
--(void) setDIState:(int)state;
--(NSData *) getDIShowData;
--(NSMutableArray*) getDIAllfileData;
-
--(NSMutableData*) getDIDebugData:(BOOL)bList;
-
--(void) convertData:(NSData*)data c:(BOOL)b;
--(int) getDIFileSize;
--(void)releaseTempData;
--(void)checkDIPaperSize:(NSData *)data;
-
-#if TARGET_OS_IPHONE
--(int) DIDownFilePercent;
--(float) DIDownFileTime;
-#else
--(void) setNonSandbox;
-#endif
-// Data Import End =============================//
-
 @end

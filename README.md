@@ -1,2 +1,2 @@
 # SDK_iOS
-Equil SDK For iOS
+Luidia SDK For iOS

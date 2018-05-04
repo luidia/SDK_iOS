@@ -38,6 +38,7 @@ enum CaliType {
     enum CaliType type;
     int calPointCnt;
     int count;
+    int saveStationPosition;
     CGPoint m_CalResultPoint[4];
     CGPoint m_CalResultPointTemp[4];
     
@@ -146,6 +147,7 @@ enum CaliType {
         }
     }
     
+    saveStationPosition = m_PenController.StationPosition;
     if (m_PenController.StationPosition == DIRECTION_TOP) {
         type = CaliType_SmartMarker_Top;
     }
@@ -168,6 +170,8 @@ enum CaliType {
     m_PenController = pController;
 }
 - (void) closeSelf {
+    [m_PenController setStationPositionForCalibration:saveStationPosition];
+    
     [self dismissViewControllerAnimated:NO completion:^{}];
 }
 - (void) InitData {
@@ -221,6 +225,8 @@ enum CaliType {
 }
 
 - (IBAction)cancelClicked:(id)sender {
+    [m_PenController setStationPositionForCalibration:saveStationPosition];
+    
     if (delegate)
     {
         if ([self.delegate respondsToSelector:@selector(closeCalibViewController_FromMarkerCalibrationViewController)])
@@ -556,15 +562,9 @@ enum CaliType {
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-
-    float w = m_CalResultPoint[2].x-m_CalResultPoint[0].x;
-    float h = m_CalResultPoint[1].y-m_CalResultPoint[0].y;
-    CGRect rect = CGRectMake(0, 0, (int)self.view.bounds.size.width, (h*self.view.bounds.size.width)/w);
-
-    [m_PenController setCalibrationData:scaleRect(rect)
-                            GuideMargin:0
-                             CalibPoint:m_CalResultPoint];
-
+    
+    [m_PenController setCalibrationDataToDevice:(enum DEVICE_DIRECTION)type CalibPoint:m_CalResultPoint];
+    
     [m_PenController setRetObj:nil];
     [m_PenController setRetObjForEnv:nil];
 
@@ -574,18 +574,10 @@ enum CaliType {
 -(BOOL) NextCalibrationProjective4:(CGRect) rect
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [m_PenController setProjectiveLevel:4];
-        [m_PenController setCalibrationData:scaleRect(rect)
-                                GuideMargin:0
-                                 CalibPoint:m_CalResultPoint];
-        
+
         [m_PenController setCalibrationDataToDevice:(enum DEVICE_DIRECTION)type CalibPoint:m_CalResultPoint];
     }
     else {
-        [m_PenController setProjectiveLevel:4];
-        [m_PenController setCalibrationData:scaleRect(rect)
-                                GuideMargin:0
-                                 CalibPoint:m_CalResultPoint];
         [m_PenController setCalibrationDataToDevice:(enum DEVICE_DIRECTION)type CalibPoint:m_CalResultPoint];
     }
     return YES;

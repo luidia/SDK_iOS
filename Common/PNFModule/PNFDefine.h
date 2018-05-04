@@ -53,8 +53,8 @@ enum ModelCode {
     Equil,
     EquilPro,
     EquilSmartMarker,
-    EquilSmartMarkerBLE,
-    EquilSmartPenBLE
+    EbeamSmartMarkerBLE,
+    EbeamSmartPenBLE
 };
 
 #define CAL_POINT_COUNT 3

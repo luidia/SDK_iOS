@@ -1,49 +1,35 @@
 //
-//  MarkerCalibrationViewController.m
+//  PenCalibrationViewController.m
 //  PenTestExtension
 //
 //  Created by Luidia on 2018. 05. 04..
 //  Copyright © 2018년 Luidia. All rights reserved.
 //
 
-#import "MarkerCalibrationViewController.h"
+#import "PenCalibrationViewController.h"
 #import "UIImage+ImageNamed.h"
 #import "PNFPenLibExtension.h"
 #import "PNFDefine.h"
 
-enum CaliType {
-    CaliType_SmartMarker_Top = 1,
-    CaliType_SmartMarker_Left,
-    CaliType_SmartMarker_Right,
-    CaliType_SmartMarker_Bottom,
-    CaliType_SmartMarker_Both,
-};
-
-@interface MarkerCalibrationViewController () <UIAlertViewDelegate>
+@interface PenCalibrationViewController () <UIAlertViewDelegate>
 {
     IBOutlet UIButton *canceBtn;
     IBOutlet UIButton *retryBtn;
     
-    IBOutlet UIButton *eBeam_Left;
-    IBOutlet UIButton *eBeam_Top;
-    IBOutlet UIButton *eBeam_Right;
-    IBOutlet UIButton *eBeam_Bottom;
-    IBOutlet UIButton *eBeam_Both;
+    IBOutlet UIImageView *eBeam_Paper;
     
     IBOutlet UIImageView *eBeam_Point1;
     IBOutlet UIImageView *eBeam_Point1_Done;
     IBOutlet UIImageView *eBeam_Point2;
     
-    enum CaliType type;
     int calPointCnt;
     int count;
-    int saveStationPosition;
     CGPoint m_CalResultPoint[4];
     CGPoint m_CalResultPointTemp[4];
 }
 @end
 
-@implementation MarkerCalibrationViewController
+@implementation PenCalibrationViewController
 @synthesize delegate;
 
 - (void)dealloc
@@ -64,29 +50,9 @@ enum CaliType {
         retryBtn = nil;
     }
     
-    if (eBeam_Left){
-        [eBeam_Left release];
-        eBeam_Left = nil;
-    }
-    
-    if (eBeam_Top){
-        [eBeam_Top release];
-        eBeam_Top = nil;
-    }
-    
-    if (eBeam_Right){
-        [eBeam_Right release];
-        eBeam_Right = nil;
-    }
-    
-    if (eBeam_Bottom){
-        [eBeam_Bottom release];
-        eBeam_Bottom = nil;
-    }
-    
-    if (eBeam_Both){
-        [eBeam_Both release];
-        eBeam_Both = nil;
+    if (eBeam_Paper){
+        [eBeam_Paper release];
+        eBeam_Paper = nil;
     }
     
     if (eBeam_Point1){
@@ -116,7 +82,6 @@ enum CaliType {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         delegate = nil;
-        type = CaliType_SmartMarker_Top;
     }
     
     return self;
@@ -125,34 +90,18 @@ enum CaliType {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    [self.view setFrame:[[UIScreen mainScreen] bounds]];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PenHandlerWithMsg:) name:@"PNF_PEN_READ_DATA" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FreeLogMsg:) name:@"PNF_LOG_MSG" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PenCallBackFunc:) name:@"PNF_MSG" object:nil];
 
-    saveStationPosition = m_PenController.StationPosition;
-    if (m_PenController.StationPosition == DIRECTION_TOP) {
-        type = CaliType_SmartMarker_Top;
-    }
-    else if (m_PenController.StationPosition == DIRECTION_BOTTOM) {
-        type = CaliType_SmartMarker_Bottom;
-    }
-    else if (m_PenController.StationPosition == DIRECTION_RIGHT) {
-        type = CaliType_SmartMarker_Right;
-    }
-    else if (m_PenController.StationPosition == DIRECTION_BOTH) {
-        type = CaliType_SmartMarker_Both;
-    }
-    else {
-        type = CaliType_SmartMarker_Left;
-    }
-    
     [m_PenController setRetObjForEnv:self];
     if (m_PenController) {
         [m_PenController EndReadQ];
     }
     [m_PenController startCalibrationMode];
-
+    
     [self InitData];
 }
 
@@ -167,155 +116,45 @@ enum CaliType {
 - (void) InitData {
     count = 0;
     calPointCnt = 2;
-
-    if (type == CaliType_SmartMarker_Top) {
-        eBeam_Top.alpha = 1.0f;
-
-        eBeam_Left.alpha = 0.3f;
-        eBeam_Right.alpha = 0.3f;
-        eBeam_Bottom.alpha = 0.3f;
-        eBeam_Both.alpha = 0.3f;
-    }
-    else if (type == CaliType_SmartMarker_Bottom) {
-        eBeam_Bottom.alpha = 1.0f;
-
-        eBeam_Left.alpha = 0.3f;
-        eBeam_Right.alpha = 0.3f;
-        eBeam_Top.alpha = 0.3f;
-        eBeam_Both.alpha = 0.3f;
-    }
-    else if (type == CaliType_SmartMarker_Right) {
-        eBeam_Right.alpha = 1.0f;
-
-        eBeam_Left.alpha = 0.3f;
-        eBeam_Bottom.alpha = 0.3f;
-        eBeam_Top.alpha = 0.3f;
-        eBeam_Both.alpha = 0.3f;
-    }
-    else if (type == CaliType_SmartMarker_Both) {
-        eBeam_Both.alpha = 1.0f;
-
-        eBeam_Left.alpha = 0.3f;
-        eBeam_Bottom.alpha = 0.3f;
-        eBeam_Top.alpha = 0.3f;
-        eBeam_Right.alpha = 0.3f;
-    }
-    else {
-        eBeam_Left.alpha = 1.0f;
-
-        eBeam_Both.alpha = 0.3f;
-        eBeam_Bottom.alpha = 0.3f;
-        eBeam_Top.alpha = 0.3f;
-        eBeam_Right.alpha = 0.3f;
-    }
     
     eBeam_Point2.alpha = 1.0f;
     
     NSString* countStr = [NSString stringWithFormat:@"paper_set_%02d_on.png", count+1];
     [eBeam_Point1 setImage:[UIImage MyImageNamed:countStr]];
-    eBeam_Point1.frame = CGRectMake(5, 5, eBeam_Point1.frame.size.width, eBeam_Point1.frame.size.height);
+    
+    float PaperImgSize = self.view.frame.size.width<self.view.frame.size.height?self.view.frame.size.width*0.6:self.view.frame.size.height*0.6;
+    eBeam_Paper.frame = CGRectMake((self.view.frame.size.width-PaperImgSize)/2,
+                                   (self.view.frame.size.height-PaperImgSize*1.3)/2,
+                                   PaperImgSize,
+                                   PaperImgSize*1.3);
+    
+    eBeam_Point1.frame = CGRectMake(eBeam_Paper.frame.origin.x+5,
+                                    eBeam_Paper.frame.origin.y+5+(eBeam_Paper.frame.size.height)/10,
+                                    eBeam_Point1.frame.size.width,
+                                    eBeam_Point1.frame.size.height);
+    
+    eBeam_Point1_Done.frame = CGRectMake(eBeam_Paper.frame.origin.x+5,
+                                         eBeam_Paper.frame.origin.y+5+(eBeam_Paper.frame.size.height)/10,
+                                         eBeam_Point1_Done.frame.size.width,
+                                         eBeam_Point1_Done.frame.size.height);
+    
+    eBeam_Point2.frame = CGRectMake(eBeam_Paper.frame.origin.x+eBeam_Paper.frame.size.width-eBeam_Point2.frame.size.width-5,
+                                    eBeam_Paper.frame.origin.y+eBeam_Paper.frame.size.height-eBeam_Point2.frame.size.height-5,
+                                    eBeam_Point2.frame.size.width,
+                                    eBeam_Point2.frame.size.height);
 }
 
 - (IBAction)cancelClicked:(id)sender {
-    [m_PenController setStationPositionForCalibration:saveStationPosition];
-    
     if (delegate)
     {
-        if ([self.delegate respondsToSelector:@selector(closeMarkerCalibrationViewController)])
-            [delegate closeMarkerCalibrationViewController];
+        if ([self.delegate respondsToSelector:@selector(closePenCalibrationViewController)])
+            [delegate closePenCalibrationViewController];
     }
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (IBAction)retryClicked:(id)sender {
     [self InitData];
-}
-
-- (IBAction)eBeam_Left_Clicked:(id)sender {
-    if (type == CaliType_SmartMarker_Left)
-        return;
-
-    type = CaliType_SmartMarker_Left;
-
-    eBeam_Left.alpha = 1.0f;
-
-    eBeam_Both.alpha = 0.3f;
-    eBeam_Bottom.alpha = 0.3f;
-    eBeam_Top.alpha = 0.3f;
-    eBeam_Right.alpha = 0.3f;
-
-    [m_PenController setStationPositionForCalibration:(enum DEVICE_DIRECTION)type];
-
-    [self retryClicked:nil];
-}
-- (IBAction)eBeam_Top_Clicked:(id)sender {
-    if (type == CaliType_SmartMarker_Top)
-        return;
-
-    type = CaliType_SmartMarker_Top;
-
-    eBeam_Top.alpha = 1.0f;
-
-    eBeam_Both.alpha = 0.3f;
-    eBeam_Bottom.alpha = 0.3f;
-    eBeam_Left.alpha = 0.3f;
-    eBeam_Right.alpha = 0.3f;
-
-    [m_PenController setStationPositionForCalibration:(enum DEVICE_DIRECTION)type];
-
-    [self retryClicked:nil];
-}
-- (IBAction)eBeam_right_Clicked:(id)sender {
-    if (type == CaliType_SmartMarker_Right)
-        return;
-
-    type = CaliType_SmartMarker_Right;
-
-    eBeam_Right.alpha = 1.0f;
-
-    eBeam_Both.alpha = 0.3f;
-    eBeam_Bottom.alpha = 0.3f;
-    eBeam_Left.alpha = 0.3f;
-    eBeam_Top.alpha = 0.3f;
-
-    [m_PenController setStationPositionForCalibration:(enum DEVICE_DIRECTION)type];
-
-    [self retryClicked:nil];
-}
-- (IBAction)eBeam_Bottom_Clicked:(id)sender {
-    if (type == CaliType_SmartMarker_Bottom)
-        return;
-
-    type = CaliType_SmartMarker_Bottom;
-
-    eBeam_Bottom.alpha = 1.0f;
-
-    eBeam_Both.alpha = 0.3f;
-    eBeam_Right.alpha = 0.3f;
-    eBeam_Left.alpha = 0.3f;
-    eBeam_Top.alpha = 0.3f;
-
-    [m_PenController setStationPositionForCalibration:(enum DEVICE_DIRECTION)type];
-
-    [self retryClicked:nil];
-}
-
-- (IBAction)eBeam_Both_Clicked:(id)sender {
-    if (type == CaliType_SmartMarker_Both)
-        return;
-
-    type = CaliType_SmartMarker_Both;
-
-    eBeam_Both.alpha = 1.0f;
-
-    eBeam_Bottom.alpha = 0.3f;
-    eBeam_Right.alpha = 0.3f;
-    eBeam_Left.alpha = 0.3f;
-    eBeam_Top.alpha = 0.3f;
-
-    [m_PenController setStationPositionForCalibration:(enum DEVICE_DIRECTION)type];
-
-    [self retryClicked:nil];
 }
 
 - (void) FreeLogMsg:(NSNotification *) note {
@@ -349,8 +188,8 @@ enum CaliType {
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-            if ([self.delegate respondsToSelector:@selector(successMarkerCalibrationViewController)]) {
-                [delegate successMarkerCalibrationViewController];
+            if ([self.delegate respondsToSelector:@selector(successPenCalibrationViewController)]) {
+                [delegate successPenCalibrationViewController];
             }
             [self dismissViewControllerAnimated:YES completion:^{}];
         }];
@@ -410,18 +249,6 @@ enum CaliType {
         return;
     }
 
-    int rightDataFlag = (Arg_SMPenFlag & 0x01);
-
-    if (type == CaliType_SmartMarker_Right) {
-        if (rightDataFlag) {
-            return;
-        }
-    }else{
-        if (!rightDataFlag) {
-            return;
-        }
-    }
-
     switch (Arg_PenStatus) {
         case PEN_UP: {
             m_CalResultPointTemp[count].x = Arg_ptRaw.x;
@@ -429,16 +256,6 @@ enum CaliType {
             count++;
 
             if (count == calPointCnt) {
-                if (type == CaliType_SmartMarker_Right) {
-                    CGPoint tCali[2];
-                    tCali[0].x = m_CalResultPointTemp[1].x;
-                    tCali[0].y = m_CalResultPointTemp[0].y;
-                    tCali[1].x = m_CalResultPointTemp[0].x;
-                    tCali[1].y = m_CalResultPointTemp[1].y;
-                    m_CalResultPointTemp[0] = tCali[0];
-                    m_CalResultPointTemp[1] = tCali[1];
-                }
-
                 [NSTimer scheduledTimerWithTimeInterval:0.1f
                                                  target:self
                                                selector:@selector(runApplyProcess)
@@ -490,8 +307,8 @@ enum CaliType {
         return;
     }
 
-    if (m_CalResultPoint[2].x - m_CalResultPoint[0].x < 2400 ||
-        m_CalResultPoint[1].y - m_CalResultPoint[0].y < 2400) {
+    if (m_CalResultPoint[2].x - m_CalResultPoint[0].x < 500 ||
+        m_CalResultPoint[1].y - m_CalResultPoint[0].y < 500) {
         [self retryClicked:nil];
         
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"small area error"
@@ -504,7 +321,7 @@ enum CaliType {
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-
+    
     m_CalResultPoint[0].x = m_CalResultPointTemp[0].x;
     m_CalResultPoint[0].y = m_CalResultPointTemp[0].y;
     m_CalResultPoint[1].x = m_CalResultPointTemp[0].x;
@@ -514,7 +331,7 @@ enum CaliType {
     m_CalResultPoint[3].x = m_CalResultPointTemp[1].x;
     m_CalResultPoint[3].y = m_CalResultPointTemp[0].y;
     
-    [m_PenController sendCalibrationDataToDevice:(enum DEVICE_DIRECTION)type CalibPoint:m_CalResultPoint];
+    [m_PenController sendCalibrationDataToDevice:DIRECTION_TOP CalibPoint:m_CalResultPoint];
 }
 
 -(BOOL) shouldAutoRotate {

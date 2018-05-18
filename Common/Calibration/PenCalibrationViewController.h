@@ -1,5 +1,5 @@
 //
-//  MarkerCalibrationViewController.h
+//  PenCalibrationViewController.h
 //  PenTestExtension
 //
 //  Created by Luidia on 2018. 05. 04..
@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol MarkerCalibrationViewControllerDelegate
--(void) closeMarkerCalibrationViewController;
--(void) successMarkerCalibrationViewController;
+@protocol PenCalibrationViewControllerDelegate
+-(void) closePenCalibrationViewController;
+-(void) successPenCalibrationViewController;
 @end
 
 @class PNFPenLibExtension;
 
-@interface MarkerCalibrationViewController : UIViewController
+@interface PenCalibrationViewController : UIViewController
 {
-    id<MarkerCalibrationViewControllerDelegate> delegate;
+    id<PenCalibrationViewControllerDelegate> delegate;
     
     PNFPenLibExtension*	m_PenController;
 }

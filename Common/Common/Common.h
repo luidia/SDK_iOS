@@ -3,7 +3,7 @@
 //  PenTest
 //
 //  Created by Luidia on 2018. 05. 04..
-//  Copyright © 2018년 choi. All rights reserved.
+//  Copyright © 2018년 Luidia. All rights reserved.
 //
 
 #ifndef PenTest_Common_h

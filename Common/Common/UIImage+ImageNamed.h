@@ -1,9 +1,9 @@
 //
 //  UIImage+ImageNamed.h
-//  Equil Note HD
+//  PenTestExtension
 //
-//  Created by choi on 14. 5. 20..
-//  Copyright (c) 2014년 PenAndFree. All rights reserved.
+//  Created by Luidia on 2018. 05. 04..
+//  Copyright © 2018년 Luidia. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -1,9 +1,9 @@
 //
 //  UIImage+ImageNamed.m
-//  Equil Note HD
+//  PenTestExtension
 //
-//  Created by choi on 14. 5. 20..
-//  Copyright (c) 2014년 PenAndFree. All rights reserved.
+//  Created by Luidia on 2018. 05. 04..
+//  Copyright © 2018년 Luidia. All rights reserved.
 //
 
 #import "UIImage+ImageNamed.h"
@@ -15,25 +15,15 @@
 	NSString	*path	= nil;
 	NSString	*name	= [imageName stringByDeletingPathExtension];
 	NSString	*ext	= [imageName pathExtension];
-	BOOL		isiPhone	= YES;
 	
 	if( [[UIScreen mainScreen] respondsToSelector:@selector(scale)] &&
 	   [UIImage instancesRespondToSelector:@selector(scale)] )
 	{
-#if __IPHONE_3_2 <= __IPHONE_OS_VERSION_MAX_ALLOWED
-		if( UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone )
-		{
-            isiPhone    = NO;
-		}
-#endif
-		
 		if( [[UIScreen mainScreen] scale] == 2.0)
 		{
 			// 레티나 디스플레이 지원용 이미지 확인 작업.
 			path	= [[NSBundle mainBundle] pathForResource:[name stringByAppendingString:@"@2x"]
 												   ofType:ext];
-			
-			
 		}
 	}
 	

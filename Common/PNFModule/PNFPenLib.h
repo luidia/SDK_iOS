@@ -2,8 +2,8 @@
 //  PNFPenLib.h
 //  PNFPenLib
 //
-//  Created by PNF on 5/30/12.
-//  Copyright (c) 2012 Choi. All rights reserved.
+//  Created by Luidia on 2018. 05. 04..
+//  Copyright © 2018년 Luidia. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -57,6 +57,7 @@
 @property(readonly) enum DEVICE_LANGUAGE_CODE deviceLanguage;
 
 // For BLE Start
+-(id)initWithExtension;
 -(void) BLEInit;
 -(void) BLEScan;
 -(void) BLEScanStop;
@@ -72,7 +73,7 @@
 -(void) setStationPositionForCalibration:(enum DEVICE_DIRECTION)dir;
 -(void) changeDeviceName:(NSString*)name;
 -(void) getCalibrationInfo;
--(void) setCalibrationDataToDevice:(enum DEVICE_DIRECTION)position CalibPoint:(CGPoint[]) ptCal;
+-(void) sendCalibrationDataToDevice:(enum DEVICE_DIRECTION)position CalibPoint:(CGPoint[]) ptCal;
 -(void) resetCalibrationToDevice;
 -(void) setDeviceLanguage:(enum DEVICE_LANGUAGE_CODE)lang;
 // For BLE End
@@ -84,7 +85,10 @@
 -(void) setRetObj:(NSObject *) obj;
 -(NSObject*) getRetObj;
 -(void) setRetObjForEnv:(NSObject *) obj;
+-(NSObject*) getRetObjForEnv;
 
+-(CGSize) getCalibrationSize;
+-(void) setCalibration:(CGRect) rtDraw GuideMargin:(float) margin;
 -(void) setCalibrationData:(CGRect) rtDraw GuideMargin:(float) margin CalibPoint:(CGPoint[]) ptCal;
 
 -(void) setProjectiveLevel:(int) nProjectiveLevel;

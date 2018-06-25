@@ -1,9 +1,9 @@
 //
 //  Toast+UIView.m
-//  
+//  PenTestExtension
 //
-//
-//  Copyright 2011
+//  Created by Luidia on 2018. 05. 04..
+//  Copyright © 2018년 Luidia. All rights reserved.
 //
 
 #import "Toast+UIView.h"
@@ -54,22 +54,22 @@ static NSString *kDurationKey = @"duration";
         return;
     UIView *toast = [self makeViewForMessage:message title:nil image:nil];
     toast.tag = 57709;
-    [self showToast:toast duration:interval position:point];  
+    [self showToast:toast duration:interval position:point];
 }
 
 -(void)makeToast:(NSString *)message duration:(float)interval position:(id)point title:(NSString *)title {
     UIView *toast = [self makeViewForMessage:message title:title image:nil];
-    [self showToast:toast duration:interval position:point];  
+    [self showToast:toast duration:interval position:point];
 }
 
 -(void)makeToast:(NSString *)message duration:(float)interval position:(id)point image:(UIImage *)image {
     UIView *toast = [self makeViewForMessage:message title:nil image:image];
-    [self showToast:toast duration:interval position:point];  
+    [self showToast:toast duration:interval position:point];
 }
 
 -(void)makeToast:(NSString *)message duration:(float)interval  position:(id)point title:(NSString *)title image:(UIImage *)image {
     UIView *toast = [self makeViewForMessage:message title:title image:image];
-    [self showToast:toast duration:interval position:point];  
+    [self showToast:toast duration:interval position:point];
 }
 
 -(void)showToast:(UIView *)toast {
@@ -171,7 +171,7 @@ static NSString *kDurationKey = @"duration";
      ***********************************************************************************/
     
     if((message == nil) && (title == nil) && (image == nil)) return nil;
-
+    
     UILabel *messageLabel = nil;
     UILabel *titleLabel = nil;
     UIImageView *imageView = nil;
@@ -202,8 +202,8 @@ static NSString *kDurationKey = @"duration";
         titleLabel = [[[UILabel alloc] init] autorelease];
         [titleLabel setNumberOfLines:kMaxTitleLines];
         [titleLabel setFont:[UIFont boldSystemFontOfSize:kFontSize]];
-        [titleLabel setTextAlignment:(NSTextAlignment)NSTextAlignmentCenter/*UITextAlignmentLeft*/];
-        [titleLabel setLineBreakMode:(NSLineBreakMode)NSLineBreakByWordWrapping];
+        [titleLabel setTextAlignment:NSTextAlignmentCenter];
+        [titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [titleLabel setTextColor:[UIColor whiteColor]];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
         [titleLabel setAlpha:1.0];
@@ -211,12 +211,12 @@ static NSString *kDurationKey = @"duration";
         
         // size the title label according to the length of the text
         CGSize maxSizeTitle = CGSizeMake((self.bounds.size.width * kMaxWidth) - imageWidth, self.bounds.size.height * kMaxHeight);
+        //        CGSize expectedSizeTitle = [title sizeWithFont:titleLabel.font constrainedToSize:maxSizeTitle lineBreakMode:titleLabel.lineBreakMode];
         CGRect textRect = [title boundingRectWithSize:maxSizeTitle
                                               options:NSStringDrawingUsesLineFragmentOrigin
                                            attributes:@{NSFontAttributeName:titleLabel.font}
                                               context:nil];
         CGSize expectedSizeTitle = textRect.size;
-//        CGSize expectedSizeTitle = [title sizeWithFont:titleLabel.font constrainedToSize:maxSizeTitle lineBreakMode:titleLabel.lineBreakMode];
         [titleLabel setFrame:CGRectMake(0, 0, expectedSizeTitle.width, expectedSizeTitle.height)];
     }
     
@@ -224,7 +224,7 @@ static NSString *kDurationKey = @"duration";
         messageLabel = [[[UILabel alloc] init] autorelease];
         [messageLabel setNumberOfLines:kMaxMessageLines];
         [messageLabel setFont:[UIFont systemFontOfSize:kFontSize]];
-        [messageLabel setLineBreakMode:(NSLineBreakMode)NSLineBreakByWordWrapping];
+        [messageLabel setLineBreakMode:NSLineBreakByWordWrapping];
         [messageLabel setTextColor:[UIColor whiteColor]];
         [messageLabel setBackgroundColor:[UIColor clearColor]];
         [messageLabel setAlpha:1.0];
@@ -232,12 +232,12 @@ static NSString *kDurationKey = @"duration";
         
         // size the message label according to the length of the text
         CGSize maxSizeMessage = CGSizeMake((self.bounds.size.width * kMaxWidth) - imageWidth, self.bounds.size.height * kMaxHeight);
-        CGRect textRect = [message boundingRectWithSize:maxSizeMessage
-                                                options:NSStringDrawingUsesLineFragmentOrigin
-                                             attributes:@{NSFontAttributeName:messageLabel.font}
-                                                context:nil];
+        //        CGSize expectedSizeMessage = [message sizeWithFont:messageLabel.font constrainedToSize:maxSizeMessage lineBreakMode:messageLabel.lineBreakMode];
+        CGRect textRect = [title boundingRectWithSize:maxSizeMessage
+                                              options:NSStringDrawingUsesLineFragmentOrigin
+                                           attributes:@{NSFontAttributeName:messageLabel.font}
+                                              context:nil];
         CGSize expectedSizeMessage = textRect.size;
-//        CGSize expectedSizeMessage = [message sizeWithFont:messageLabel.font constrainedToSize:maxSizeMessage lineBreakMode:messageLabel.lineBreakMode]; 
         [messageLabel setFrame:CGRectMake(0, 0, expectedSizeMessage.width, expectedSizeMessage.height)];
     }
     
@@ -255,7 +255,7 @@ static NSString *kDurationKey = @"duration";
     
     // messageLabel frame values
     float messageWidth, messageHeight, messageLeft, messageTop;
-
+    
     if(messageLabel != nil) {
         messageWidth = messageLabel.bounds.size.width;
         messageHeight = messageLabel.bounds.size.height;
@@ -274,7 +274,7 @@ static NSString *kDurationKey = @"duration";
     // the same logic applies to the wrapper height
     float wrapperWidth = ((longerLeft + longerWidth + kHorizontalPadding) < imageWidth + (kHorizontalPadding * 2)) ? imageWidth + (kHorizontalPadding * 2) : (longerLeft + longerWidth + kHorizontalPadding);
     float wrapperHeight = ((messageTop + messageHeight + kVerticalPadding) < imageHeight + (kVerticalPadding * 2)) ? imageHeight + (kVerticalPadding * 2) : (messageTop + messageHeight + kVerticalPadding);
-                         
+    
     [wrapperView setFrame:CGRectMake(0, 0, wrapperWidth, wrapperHeight)];
     
     if(titleLabel != nil) {
@@ -295,3 +295,4 @@ static NSString *kDurationKey = @"duration";
 }
 
 @end
+

@@ -2,8 +2,8 @@
 //  Common.h
 //  PenTest
 //
-//  Created by Choi on 5/12/15.
-//  Copyright (c) 2015 choi. All rights reserved.
+//  Created by Luidia on 2018. 05. 04..
+//  Copyright © 2018년 Luidia. All rights reserved.
 //
 
 #ifndef PenTest_Common_h

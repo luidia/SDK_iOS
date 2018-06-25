@@ -18,6 +18,21 @@ enum PEN_STATUS {
     PEN_HOVER_MOVE
 };
 
+enum DEVICE_LANGUAGE_CODE {
+    Language_None = -1,
+    Language_English = 0,
+    Language_Korean = 1,
+    Language_Spanish = 2,
+    Language_German = 3,
+    Language_French = 4,
+    Language_Italian = 5,
+    Language_Japan = 6,
+    Language_Portuguese = 7,
+    Language_Russian = 8,
+    Language_Chinese = 9,
+    Language_Arabic = 11,
+};
+
 enum PNF_ERROR{
     PNF_E_NOT_CONNECTED=-1001,
     PNF_E_INVALID_PROTOCOL=-1002,
@@ -28,7 +43,8 @@ enum DEVICE_DIRECTION {
     DIRECTION_TOP=1,
     DIRECTION_LEFT,
     DIRECTION_RIGHT,
-    DIRECTION_BOTTOM
+    DIRECTION_BOTTOM,
+    DIRECTION_BOTH
 };
 
 enum ModelCode {
@@ -36,7 +52,9 @@ enum ModelCode {
     LolLolPen,
     Equil,
     EquilPro,
-    EquilSmartMarker
+    EquilSmartMarker,
+    eBeamSmartMarker,
+    eBeamSmartPen
 };
 
 #define CAL_POINT_COUNT 3
@@ -95,6 +113,15 @@ enum DataImportCommand {
     DI_PacketSize108,
     DI_PacketSize126,   // 25
     DI_PacketSize144,
-    DI_SetLabel
+    DI_SetLabel,
+    DI_SetDevicePosition,
+    DI_SetDeviceCalibration1,
+    DI_SetDeviceCalibration2,
+    DI_GetDevicePositionCalibration,
+    DI_StartCalibrationMode,
+    DI_EndCalibrationMode,
+    DI_ChangeDeviceName,
+    DI_ResetCalibration,
+    DI_SetDeviceLanguage,
 };
 #endif
